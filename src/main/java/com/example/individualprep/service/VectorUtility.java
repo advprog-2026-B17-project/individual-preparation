@@ -11,7 +11,12 @@ public class VectorUtility {
     }
 
     public double[] subtract(double[] v1, double[] v2) {
-        // TODO: Implement me properly!
+        if (v1 == null || v2 == null) {
+            throw new IllegalArgumentException("Vektor tidak boleh null!");
+        }
+        if (v1.length != v2.length) {
+            throw new IllegalArgumentException("Dimensi vektor harus sama!");
+        }
         double[] result = new double[v1.length];
         for (int index = 0; index < v1.length; index++) {
             result[index] = v1[index] - v2[index];
