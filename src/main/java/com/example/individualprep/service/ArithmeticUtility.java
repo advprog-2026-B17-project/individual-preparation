@@ -28,7 +28,16 @@ public class ArithmeticUtility {
     }
 
     public double exponent(double o1, int n) {
-        // TODO: Implement me properly!
-        return 0.0;
+        if (o1 == 0 && n <= 0) {
+            throw new ArithmeticException("Basis nol tidak boleh dipangkatkan dengan eksponen nol atau negatif!");
+        }
+        if (n == 0) {
+            return 1.0;
+        }
+        double result = 1.0;
+        for (int i = 1; i <= Math.abs(n); i++) {
+            result *= o1;
+        }
+        return n < 0 ? 1.0 / result : result;
     }
 }
