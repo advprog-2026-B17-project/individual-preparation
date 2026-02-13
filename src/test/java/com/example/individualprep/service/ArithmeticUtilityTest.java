@@ -22,4 +22,12 @@ public class ArithmeticUtilityTest {
         assertEquals("Pembagi tidak boleh nol!", exception.getMessage());
     }
 
+    @Test
+    void testMultiplySuccess() {
+        assertEquals(0, arithmeticUtility.multiply(2, 0));
+        assertEquals(3, arithmeticUtility.multiply(1, 3));
+        assertEquals(0, arithmeticUtility.multiply(0, 0));
+        assertEquals(0, arithmeticUtility.multiply(0, 3));
+        assertEquals(14, arithmeticUtility.multiply(2, 7));
+    }
 }
