@@ -40,4 +40,37 @@ public class VectorUtilityTest {
 
         assertThrows(IllegalArgumentException.class, () -> vectorUtility.multiply(v1, x));
     }
+
+    @Test
+    void testAddSuccess() {
+        double[] v1 = {1.0, 2.0, 3.0};
+        double[] v2 = {4.0, 5.0, 6.0};
+        double[] expected = {5.0, 7.0, 9.0};
+
+        assertArrayEquals(expected, vectorUtility.add(v1, v2));
+    }
+
+    @Test
+    void testAddDifferentLength() {
+        double[] v1 = {1.0, 2.0};
+        double[] v2 = {1.0, 2.0, 3.0};
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.add(v1, v2);
+        });
+
+        assertEquals("Dimensi kedua vektor harus sama!", exception.getMessage());
+    }
+
+    @Test
+    void testAddNullVectors() {
+        double[] v1 = null;
+        double[] v2 = null;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.add(v1, v2);
+        });
+
+        assertEquals("Kedua vektor tidak boleh null!", exception.getMessage());
+    }
 }
