@@ -1,22 +1,48 @@
-name: Continuous Integration
+name: Java Continuous Integration using Gradle, Linter, and SonarCloud
 
 ## Run CI jobs on all branches by default
 on:
   push:
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
 
 jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-22.04
+  build:
+    name: Build and Test with Gradle
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Check out the Git repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Java toolchain
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: gradle
-      - name: Run unit tests
-        run: ./gradlew test
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x ./gradlew
+      
+      - name: Build and Run with Linter
+        run: ./gradlew clean build check --info
+      
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew sonar --info
